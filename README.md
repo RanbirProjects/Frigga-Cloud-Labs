@@ -1,29 +1,32 @@
-# 📝 DocCollab - Advanced Document Collaboration Platform
+📝 DocCollab - Advanced Document Collaboration Platform
 
 A full-stack document collaboration platform built with the MERN stack (MongoDB, Express.js, React.js, Node.js) featuring real-time collaboration, advanced document management, and comprehensive user features.
+Website page
+![D4F0EE72-6427-452A-B93E-9FA77F8BF747](https://github.com/user-attachments/assets/beee7f35-e352-405e-aa8a-4026dd1a2a72)
 
-## 🚀 Features
 
-### 🔐 Authentication & User Management
-- **User Registration & Login**: Secure authentication with JWT tokens
-- **User Profiles**: Comprehensive user profiles with statistics and activity tracking
-- **Profile Management**: Edit profile information, bio, and preferences
-- **Account Settings**: Password changes, email preferences, and account configuration
+🚀 Features
 
-### 📄 Document Management
-- **Document Creation**: Create documents with rich text editing
-- **Document Templates**: Pre-built templates for common document types:
+🔐 Authentication & User Management
+- User Registration & Login: Secure authentication with JWT tokens
+- User Profiles: Comprehensive user profiles with statistics and activity tracking
+- Profile Management: Edit profile information, bio, and preferences
+- Account Settings: Password changes, email preferences, and account configuration
+- 
+ 📄 Document Management
+- Document Creation: Create documents with rich text editing
+- Document Templates: Pre-built templates for common document types:
   - Blank Document
   - Meeting Notes
   - Project Plan
   - Research Paper
-- **Document Organization**: Tags, categories, and advanced filtering
-- **Bulk Operations**: Select multiple documents for bulk actions (delete, export, archive)
-- **Version Control**: Track document versions and restore previous versions
-- **Auto-save**: Automatic document saving with configurable intervals
+- Document Organization: Tags, categories, and advanced filtering
+- Bulk Operations: Select multiple documents for bulk actions (delete, export, archive)
+- Version Control: Track document versions and restore previous versions
+- Auto-save: Automatic document saving with configurable intervals
 
-### 👥 Collaboration Features
-- **Real-time Collaboration**: Multiple users can edit documents simultaneously
+ 👥 Collaboration Features
+- Real-time Collaboration: Multiple users can edit documents simultaneously
 - **Permission Management**: Granular permissions (view, edit, admin)
 - **Document Sharing**: Share documents with specific users or make them public
 - **Collaborator Management**: Add/remove collaborators with different permission levels

@@ -1,0 +1,20 @@
+{
+  "name": "figga-cloud-labs-document-collaboration",
+  "version": "1.0.0",
+  "description": "A document collaboration platform with real-time editing, user authentication, and version control",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd backend && npm run dev",
+    "client": "cd frontend && npm start",
+    "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "build": "cd frontend && npm run build"
+  },
+  "keywords": ["mern", "document-collaboration", "real-time-editing", "authentication"],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+} 

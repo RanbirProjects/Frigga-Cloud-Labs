@@ -1,6 +1,8 @@
 📝 DocCollab - Advanced Document Collaboration Platform
 
 A full-stack document collaboration platform built with the MERN stack (MongoDB, Express.js, React.js, Node.js) featuring real-time collaboration, advanced document management, and comprehensive user features.
+Webiste video
+https://github.com/user-attachments/assets/a4aef629-1130-4ee8-8400-21baa3ab53c8
 Website page
 ![EBE63EEF-BFE6-4ED9-BD49-3BAD9D24E233](https://github.com/user-attachments/assets/d65ab77e-47fb-4d59-b601-d469d6521343)
 Tabs

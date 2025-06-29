@@ -2,8 +2,11 @@
 
 A full-stack document collaboration platform built with the MERN stack (MongoDB, Express.js, React.js, Node.js) featuring real-time collaboration, advanced document management, and comprehensive user features.
 Website page
-![D4F0EE72-6427-452A-B93E-9FA77F8BF747](https://github.com/user-attachments/assets/beee7f35-e352-405e-aa8a-4026dd1a2a72)
-
+![EBE63EEF-BFE6-4ED9-BD49-3BAD9D24E233](https://github.com/user-attachments/assets/d65ab77e-47fb-4d59-b601-d469d6521343)
+Tabs
+![A8DF9C73-873F-4FC0-8738-81FC19490D2A](https://github.com/user-attachments/assets/5ba52d21-41ef-471f-8b50-926302a4c89b)
+TABS
+![A8DF9C73-873F-4FC0-8738-81FC19490D2A](https://github.com/user-attachments/assets/e8fc407f-c3e1-448a-9576-622a1c3ad680)
 
 🚀 Features
 

@@ -68,13 +68,17 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const loadUser = async () => {
       if (state.token) {
+        console.log('AuthContext: Loading user with token:', state.token);
         try {
           const res = await axios.get('/api/auth/me');
+          console.log('AuthContext: User loaded successfully:', res.data);
           dispatch({ type: 'LOAD_USER_SUCCESS', payload: res.data.user });
         } catch (error) {
+          console.error('AuthContext: Error loading user:', error);
           dispatch({ type: 'AUTH_ERROR' });
         }
       } else {
+        console.log('AuthContext: No token found');
         dispatch({ type: 'AUTH_ERROR' });
       }
     };

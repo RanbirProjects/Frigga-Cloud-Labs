@@ -1,6 +1,7 @@
 const express = require('express');
 const { body, validationResult } = require('express-validator');
 const User = require('../models/User');
+const Document = require('../models/Document');
 const { protect } = require('../middleware/auth');
 const sendEmail = require('../utils/sendEmail');
 const crypto = require('crypto');
@@ -43,6 +44,96 @@ router.post('/register', [
     });
 
     await user.save();
+
+    // Create sample documents for new user
+    const sampleDocuments = [
+      {
+        title: 'Welcome to Document Collaboration',
+        content: `# Welcome to Your Document Collaboration Platform!
+
+This is your first document. You can:
+- Edit this document by clicking the edit button
+- Create new documents using the "+" button
+- Share documents with collaborators
+- Use the search feature to find documents quickly
+
+## Getting Started
+1. Create your first document
+2. Invite collaborators
+3. Start collaborating in real-time
+
+Happy collaborating!`,
+        author: user._id,
+        isPublic: false,
+        tags: ['welcome', 'getting-started'],
+        lastModifiedBy: user._id
+      },
+      {
+        title: 'Project Ideas',
+        content: `# Project Ideas
+
+## Current Projects
+- [ ] Document collaboration platform
+- [ ] User authentication system
+- [ ] Real-time editing features
+
+## Future Ideas
+- [ ] Mobile app
+- [ ] Advanced search
+- [ ] Document templates
+
+## Notes
+Add your project ideas here and collaborate with your team!`,
+        author: user._id,
+        isPublic: false,
+        tags: ['projects', 'ideas'],
+        lastModifiedBy: user._id
+      },
+      {
+        title: 'Meeting Notes Template',
+        content: `# Meeting Notes
+
+**Date:** [Insert Date]
+**Time:** [Insert Time]
+**Attendees:** [List Attendees]
+
+## Agenda
+1. [Topic 1]
+2. [Topic 2]
+3. [Topic 3]
+
+## Discussion Points
+- [Discussion point 1]
+- [Discussion point 2]
+
+## Action Items
+- [ ] [Action item 1] - [Assignee] - [Due Date]
+- [ ] [Action item 2] - [Assignee] - [Due Date]
+
+## Next Meeting
+**Date:** [Next Meeting Date]
+**Time:** [Next Meeting Time]`,
+        author: user._id,
+        isPublic: true,
+        tags: ['template', 'meeting', 'notes'],
+        lastModifiedBy: user._id
+      }
+    ];
+
+    // Create sample documents
+    for (const docData of sampleDocuments) {
+      const document = new Document(docData);
+      
+      // Add initial version for each document
+      document.versions.push({
+        content: docData.content,
+        version: 1,
+        createdBy: user._id,
+        changes: 'Initial version'
+      });
+      
+      await document.save();
+    }
 
     // Create token
     const token = user.getJwtToken();

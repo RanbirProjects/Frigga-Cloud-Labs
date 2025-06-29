@@ -165,9 +165,17 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (user) {
+      console.log('Dashboard: User authenticated, fetching documents...', user);
       getDocuments();
+    } else {
+      console.log('Dashboard: No user found');
     }
   }, [getDocuments, user]);
+
+  // Debug logging
+  useEffect(() => {
+    console.log('Dashboard: Documents state:', { documents, loading, error, user });
+  }, [documents, loading, error, user]);
 
   // Filter and sort documents
   const filteredDocuments = documents?.filter(doc => {

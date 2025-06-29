@@ -124,54 +124,21 @@ export const DocumentProvider = ({ children }) => {
     };
   }, []);
 
-  // Debounced error handling to prevent spam
-  const handleError = (error, defaultMessage) => {
+  // Error handler
+  const handleError = useCallback((error, defaultMessage) => {
     const message = error.response?.data?.message || defaultMessage;
-    const isNetworkError = !error.response || error.code === 'ECONNREFUSED' || error.code === 'ERR_NETWORK';
-    
-    // Don't show the same error repeatedly
-    if (lastErrorRef.current === message) {
-      return;
-    }
-    
-    lastErrorRef.current = message;
     dispatch({ type: 'SET_ERROR', payload: message });
-    
-    if (isNetworkError) {
-      dispatch({ type: 'SET_CONNECTION_STATUS', payload: false });
-      // Retry connection after 5 seconds
-      if (retryTimeoutRef.current) {
-        clearTimeout(retryTimeoutRef.current);
-      }
-      retryTimeoutRef.current = setTimeout(() => {
-        // Try to reconnect by making a simple API call
-        axios.get('/api/auth/me')
-          .then(() => {
-            dispatch({ type: 'SET_CONNECTION_STATUS', payload: true });
-            lastErrorRef.current = null;
-            // Refresh documents after reconnection
-            getDocuments();
-          })
-          .catch(() => {
-            // If still failing, try again in 10 seconds
-            retryTimeoutRef.current = setTimeout(() => {
-              dispatch({ type: 'SET_CONNECTION_STATUS', payload: true });
-              lastErrorRef.current = null;
-            }, 10000);
-          });
-      }, 5000);
-    } else {
-      toast.error(message);
-    }
-  };
+    toast.error(message);
+    lastErrorRef.current = message;
+  }, []);
 
   // Get all documents
   const getDocuments = useCallback(async (page = 1, limit = 10) => {
-    if (!state.isConnected) return;
-    
+    console.log('DocumentContext: Fetching documents...', { page, limit });
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
       const res = await axios.get(`/api/documents?page=${page}&limit=${limit}`);
+      console.log('DocumentContext: Documents fetched successfully:', res.data);
       dispatch({
         type: 'GET_DOCUMENTS_SUCCESS',
         payload: {
@@ -181,14 +148,13 @@ export const DocumentProvider = ({ children }) => {
       });
       lastErrorRef.current = null; // Clear error on success
     } catch (error) {
+      console.error('DocumentContext: Error fetching documents:', error);
       handleError(error, 'Failed to fetch documents');
     }
-  }, [state.isConnected]);
+  }, [handleError]);
 
   // Get single document
   const getDocument = useCallback(async (id) => {
-    if (!state.isConnected) return;
-    
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
       const res = await axios.get(`/api/documents/${id}`);
@@ -197,21 +163,20 @@ export const DocumentProvider = ({ children }) => {
     } catch (error) {
       handleError(error, 'Failed to fetch document');
     }
-  }, [state.isConnected]);
+  }, [handleError]);
 
   // Create document
   const createDocument = async (formData) => {
-    if (!state.isConnected) {
-      toast.error('No connection to server');
-      return { success: false, message: 'No connection to server' };
-    }
-    
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
       const res = await axios.post('/api/documents', formData);
       dispatch({ type: 'CREATE_DOCUMENT_SUCCESS', payload: res.data.data });
       toast.success('Document created successfully!');
       lastErrorRef.current = null;
+      
+      // Refresh the documents list to show the new document
+      await getDocuments();
+      
       return { success: true, document: res.data.data };
     } catch (error) {
       const message = error.response?.data?.message || 'Failed to create document';
@@ -223,11 +188,6 @@ export const DocumentProvider = ({ children }) => {
 
   // Update document
   const updateDocument = async (id, formData) => {
-    if (!state.isConnected) {
-      toast.error('No connection to server');
-      return { success: false, message: 'No connection to server' };
-    }
-    
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
       const res = await axios.put(`/api/documents/${id}`, formData);
@@ -245,17 +205,16 @@ export const DocumentProvider = ({ children }) => {
 
   // Delete document
   const deleteDocument = async (id) => {
-    if (!state.isConnected) {
-      toast.error('No connection to server');
-      return { success: false, message: 'No connection to server' };
-    }
-    
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
       await axios.delete(`/api/documents/${id}`);
       dispatch({ type: 'DELETE_DOCUMENT_SUCCESS', payload: id });
       toast.success('Document deleted successfully!');
       lastErrorRef.current = null;
+      
+      // Refresh the documents list to update the UI
+      await getDocuments();
+      
       return { success: true };
     } catch (error) {
       const message = error.response?.data?.message || 'Failed to delete document';
@@ -267,8 +226,6 @@ export const DocumentProvider = ({ children }) => {
 
   // Search documents
   const searchDocuments = async (query) => {
-    if (!state.isConnected) return;
-    
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
       const res = await axios.get(`/api/documents/search?q=${encodeURIComponent(query)}`);
@@ -281,11 +238,6 @@ export const DocumentProvider = ({ children }) => {
 
   // Share document
   const shareDocument = async (id, email, permission) => {
-    if (!state.isConnected) {
-      toast.error('No connection to server');
-      return { success: false, message: 'No connection to server' };
-    }
-    
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
       const res = await axios.post(`/api/documents/${id}/share`, { email, permission });
@@ -356,6 +308,7 @@ export const DocumentProvider = ({ children }) => {
     loading: state.loading,
     error: state.error,
     pagination: state.pagination,
+    isConnected: state.isConnected,
     getDocuments,
     getDocument,
     createDocument,
